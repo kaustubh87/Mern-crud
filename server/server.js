@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
-
+const postRoutes = require("./routes/post");
 const app = express();
 
 //Database connection
@@ -20,13 +20,9 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 
-//Endpoint creation
+//Routes
 
-app.get("*", function (req, res) {
-  res.json({
-    data: "You reached nodejs API",
-  });
-});
+app.use("/api", postRoutes);
 
 const port = process.env.PORT || 8000;
 app.listen(port, function () {
