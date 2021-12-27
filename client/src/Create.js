@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Create = () => {
   //state
@@ -22,12 +23,29 @@ const Create = () => {
     };
   }
 
+  const handleSubmit = (event) => {
+    // console.table({ title, content, user });
+    event.preventDefault();
+    axios
+      .post(`${process.env.REACT_APP_API}/post`, { title, content, user })
+      .then((response) => {
+        // Empty the state
+        console.log(response);
+        // show success alert
+        setState({ ...state, title: "", content: "", user: "" });
+        alert(`Post with ${response.data.title} is created `);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        alert(error.response.data.error);
+      });
+  };
+
   return (
     <div className="container p-5">
       <h1>Create Post</h1>
-      {JSON.stringify(state)}
       <br />
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="text-muted">Title</label>
           <input
@@ -39,6 +57,7 @@ const Create = () => {
             required
           />
         </div>
+        <br />
 
         <div className="form-group">
           <label className="text-muted">Content</label>
@@ -51,6 +70,7 @@ const Create = () => {
             required
           ></textarea>
         </div>
+        <br />
 
         <div className="form-group">
           <label className="text-muted">User</label>
@@ -63,6 +83,7 @@ const Create = () => {
             required
           />
         </div>
+        <br />
 
         <div className="form-group">
           <button className="btn btn-primary">Create</button>
