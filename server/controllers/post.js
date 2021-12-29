@@ -4,7 +4,7 @@ const slugify = require("slugify");
 exports.create = function (req, res) {
   //   console.log(req.body);
 
-  const { title, content, user } = req.body;
+  const { title, content, user } = req.body; // req.params
   const slug = slugify(title);
 
   //Validations for title and content
@@ -47,4 +47,12 @@ exports.list = (req, res) => {
       if (err) console.log(err);
       res.json(posts);
     });
+};
+
+exports.read = (req, res) => {
+  const { slug } = req.params;
+  Post.findOne({ slug }).exec((err, post) => {
+    if (err) console.log(err);
+    res.json(post);
+  });
 };
